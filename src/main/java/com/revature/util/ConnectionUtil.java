@@ -15,7 +15,9 @@ public class ConnectionUtil {
 		//  jdbc:database-type://network-location:port/internal-database
 		String url = "jdbc:postgresql://localhost:5432/postgres";
 		try {
-			return DriverManager.getConnection(url, "employee_manager", "p4ssw0rd");
+			return DriverManager.getConnection(url, 
+								System.getenv("EM_ROLE"), 
+								System.getenv("EM_PASS"));
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("Unable to connect to database. Sad :(");
