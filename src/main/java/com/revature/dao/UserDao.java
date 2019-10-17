@@ -63,8 +63,20 @@ public class UserDao {
 	 * @param firstName
 	 * @return
 	 */
-	public List<User> getUsersByFirstName(String firstName) {
+	public List<User> getUsersByFirstName(String firstName) {		
 		try (Connection connection = ConnectionUtil.getConnection()) {
+			// starts transaction
+//			connection.setAutoCommit(false);
+			
+			// rollback transaction
+//			connection.rollback();
+			
+			// commit transaction
+//			connection.commit();
+			
+//			connection.setTransactionIsolation(
+//					Connection.TRANSACTION_REPEATABLE_READ);
+			
 			String sql = "SELECT * FROM employees WHERE LOWER(first_name) = LOWER(?)";
 			PreparedStatement statement = connection.prepareStatement(sql);
 			

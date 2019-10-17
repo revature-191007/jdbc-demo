@@ -43,7 +43,7 @@ public class UserMenu implements View {
 		
 		System.out.println("Enter team id: ");
 		int teamId = ScannerUtil.getInput(5);
-		
+		User user = new User(0, firstName, null, salary, teamId);
 	}
 
 
