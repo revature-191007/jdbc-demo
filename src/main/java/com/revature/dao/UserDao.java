@@ -19,6 +19,24 @@ import com.revature.util.ConnectionUtil;
  */
 public class UserDao {
 
+	Connection conn;
+
+	public void setConnection(Connection conn) {
+		try {
+			if (this.conn != null && !this.conn.isClosed()) {
+				System.out.println("Closing connection");
+				this.conn.close();
+			}
+			this.conn = conn;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public UserDao() {
+		this.conn = ConnectionUtil.getConnection();
+	}
+
 	/**
 	 * Connection is the fundamental JDBC interface Connections are created by using
 	 * DriverManager (or DataSource) Connections can be used to create instances of
@@ -31,8 +49,8 @@ public class UserDao {
 	 * @return
 	 */
 	public List<User> getAllUsers() {
-		try (Connection connection = ConnectionUtil.getConnection()) {
-			Statement statement = connection.createStatement();
+		try {
+			Statement statement = conn.createStatement();
 			String query = "SELECT * FROM employees";
 			ResultSet resultSet = statement.executeQuery(query);
 
@@ -46,7 +64,6 @@ public class UserDao {
 				User user = extractUser(resultSet);
 				users.add(user);
 			}
-
 			return users;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -56,34 +73,34 @@ public class UserDao {
 
 	/**
 	 * Using statement makes your application vulnerable to sql injection!!!!!!!!!!
-	 * My advice: Don't ever, ever, ever, ever use Statement.
-	 * Just get in the habit of always use PreparedStatement and all data that could possibly
-	 * come from a user should never be concatenated into the sql query.
+	 * My advice: Don't ever, ever, ever, ever use Statement. Just get in the habit
+	 * of always use PreparedStatement and all data that could possibly come from a
+	 * user should never be concatenated into the sql query.
 	 * 
 	 * @param firstName
 	 * @return
 	 */
-	public List<User> getUsersByFirstName(String firstName) {		
+	public List<User> getUsersByFirstName(String firstName) {
 		try (Connection connection = ConnectionUtil.getConnection()) {
 			// starts transaction
 //			connection.setAutoCommit(false);
-			
+
 			// rollback transaction
 //			connection.rollback();
-			
+
 			// commit transaction
 //			connection.commit();
-			
+
 //			connection.setTransactionIsolation(
 //					Connection.TRANSACTION_REPEATABLE_READ);
-			
+
 			String sql = "SELECT * FROM employees WHERE LOWER(first_name) = LOWER(?)";
 			PreparedStatement statement = connection.prepareStatement(sql);
-			
+
 			// Setting parameters - first ?, second ?, etc.
 			statement.setString(1, firstName);
 //			statement.setString(2, secondParameter);
-			
+
 			ResultSet resultSet = statement.executeQuery();
 			List<User> users = new ArrayList<>();
 
