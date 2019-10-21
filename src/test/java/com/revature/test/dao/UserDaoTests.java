@@ -33,10 +33,8 @@ public class UserDaoTests {
 
 	private static UserDao userDao = new UserDao();
 
-	// To be mocked
-	private static Connection conn;
-	
 	// To be spied upon
+	private static Connection conn;
 	private static BaseStatement stmt;
 
 	public UserDaoTests() throws SQLException {
@@ -71,7 +69,7 @@ public class UserDaoTests {
 	
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
-		// 
+		// Drop created table after tests complete
 		ConnectionUtil
 			.getConnection()
 			.createStatement()
